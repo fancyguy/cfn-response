@@ -1,3 +1,8 @@
+export type CloudFormationRequestType =
+  | "Create"
+  | "Update"
+  | "Delete";
+
 export interface CloudFormationEvent<T> {
   StackId: string;
   RequestId: string;
@@ -5,4 +10,5 @@ export interface CloudFormationEvent<T> {
   PhysicalResourceId: string;
   ResponseURL: string;
   ResourceProperties: T;
+  RequestType: CloudFormationRequestType;
 }
