@@ -9,6 +9,7 @@ const map = new WeakMap();
 interface PrivateProps {
   responded: boolean;
   timeout?: NodeJS.Timer;
+  resourceId?: string;
 }
 
 export class CloudFormationResponse {
@@ -22,6 +23,20 @@ export class CloudFormationResponse {
 
   static get FAILURE() {
     return 'FAILED';
+  }
+
+  get PhysicalResourceId() {
+    const priv: PrivateProps = map.get(this);
+    if (!priv.resourceId) {
+      priv.resourceId = this.context.logStreamName;
+    }
+
+    return priv.resourceId;
+  }
+
+  set PhysicalResourceId(id: string) {
+    const priv: PrivateProps = map.get(this);
+    priv.resourceId = id;
   }
 
   get responded() {
@@ -71,7 +86,7 @@ export class CloudFormationResponse {
       StackId: this.event.StackId,
       RequestId: this.event.RequestId,
       LogicalResourceId: this.event.LogicalResourceId,
-      PhysicalResourceId: this.event.PhysicalResourceId,
+      PhysicalResourceId: this.PhysicalResourceId,
     }, data);
 
     console.log('CloudFormationResponse:\n', JSON.stringify(responseBody, null, 2));
