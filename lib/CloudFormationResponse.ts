@@ -12,7 +12,7 @@ interface PrivateProps {
 }
 
 export class CloudFormationResponse {
-  constructor(private event: CloudFormationEvent, private context: LambdaContext) {
+  constructor(private event: CloudFormationEvent<any>, private context: LambdaContext) {
     map.set(this, {responded: false});
   }
 
