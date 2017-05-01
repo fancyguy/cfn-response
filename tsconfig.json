@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "declaration": true,
+    "sourceRoot": "lib",
+    "outDir": "dist",
+    "lib": [
+      "es5",
+      "es2015.collection",
+      "es2015.promise"
+    ]
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
