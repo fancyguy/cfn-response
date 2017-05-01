@@ -1,6 +1,6 @@
 {
   "name": "@fancyguy/cfn-response",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "request": "^2.81.0",
     "request-promise": "^4.2.0"
   },
   "devDependencies": {
