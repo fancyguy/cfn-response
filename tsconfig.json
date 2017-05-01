@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "moduleResolution": "node",
+    "module": "es6",
     "target": "es5",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "sourceMap": false,
-    "inlineSourceMap": true,
     "declaration": true,
-    "sourceRoot": "lib",
     "outDir": "dist",
     "lib": [
       "es5",
