@@ -28,7 +28,7 @@ export class CloudFormationResponse {
   get PhysicalResourceId() {
     const priv: PrivateProps = map.get(this);
     if (!priv.resourceId) {
-      priv.resourceId = this.context.logStreamName;
+      priv.resourceId = this.event.PhysicalResourceId ? this.event.PhysicalResourceId : this.context.logStreamName;
     }
 
     return priv.resourceId;
