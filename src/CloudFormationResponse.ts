@@ -1,6 +1,3 @@
-import { CloudFormationEvent } from './CloudFormationEvent';
-import { LambdaContext } from './LambdaContext';
-
 import { parse as parseUrl } from 'url';
 import { request } from 'https';
 
@@ -39,8 +36,8 @@ const sendAsync = function (uri: string, body: string): Promise<any> {
   });
 }
 
-export class CloudFormationResponse {
-  constructor(private event: CloudFormationEvent<any>, private context: LambdaContext) {
+export class CloudFormationResponse<E, C> {
+  constructor(private event: CloudFormationEvent<E>, private context: LambdaContext<C>) {
     map.set(this, {responded: false});
   }
 

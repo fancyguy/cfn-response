@@ -1,6 +1,6 @@
 {
   "name": "@fancyguy/cfn-response",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "./dist/cfn-response.min.js",
   "typings": "./lib/index.d.ts",
   "jsnext:main": "./dist/cfn-response.es.min.js",
