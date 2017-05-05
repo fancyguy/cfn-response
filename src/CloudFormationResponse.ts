@@ -1,8 +1,8 @@
-import * as _ from 'lodash';
-import * as rp from 'request-promise';
-
 import { CloudFormationEvent } from './CloudFormationEvent';
 import { LambdaContext } from './LambdaContext';
+
+import { parse as parseUrl } from 'url';
+import { request } from 'https';
 
 const map = new WeakMap();
 
@@ -10,6 +10,33 @@ interface PrivateProps {
   responded: boolean;
   timeout?: NodeJS.Timer;
   resourceId?: string;
+}
+
+const sendAsync = function (uri: string, body: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const parsedUrl = parseUrl(uri);
+    const options = {
+      hostname: parsedUrl.hostname,
+      port: 443,
+      path: parsedUrl.path,
+      method: 'PUT',
+      headers: {
+        'Content-Type': '',
+        'Content-Length': body.length,
+      },
+    };
+
+    const req = request(options, (res) => {
+      resolve(res);
+    });
+
+    req.on('error', (err) => {
+      reject(err);
+    });
+
+    req.write(body);
+    req.end();
+  });
 }
 
 export class CloudFormationResponse {
@@ -82,27 +109,21 @@ export class CloudFormationResponse {
     const priv: PrivateProps = map.get(this);
     priv.responded = true;
 
-    const responseBody = _.assign({
+    const responseBody = JSON.stringify((<any>Object).assign({
       StackId: this.event.StackId,
       RequestId: this.event.RequestId,
       LogicalResourceId: this.event.LogicalResourceId,
       PhysicalResourceId: this.PhysicalResourceId,
-    }, data);
+    }, data), null, 2);
 
-    console.log('CloudFormationResponse:\n', JSON.stringify(responseBody, null, 2));
+    console.log('CloudFormationResponse:\n', responseBody);
 
-    return rp.put({
-      uri: this.event.ResponseURL,
-      body: responseBody,
-      json: true,
-      headers: {
-        'Content-Type': ''
-      }
-    }).then((res) => {
-      this.context.succeed(res);
-    }).catch((err) => {
-      this.context.fail(err);
-    });
+    sendAsync(this.event.ResponseURL, responseBody)
+      .then((res) => {
+        this.context.succeed(res);
+      }).catch((err) => {
+        this.context.fail(err);
+      });
   }
 
   private clearTimeout() {
